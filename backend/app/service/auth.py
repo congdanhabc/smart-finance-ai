@@ -26,7 +26,7 @@ class AuthService:
     def login_user(self, login_data: UserLogin):
         user = self.user_repo.get_by_email(login_data.email)
 
-        if not user or not verify_password(login_data.password, user.password_hash):
+        if not user or not verify_password(login_data.password, str(user.password_hash)):
             logger.warning(f"Login failed for email: {login_data.email}")
             raise HTTPException(
                 status_code=401, 

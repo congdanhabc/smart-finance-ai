@@ -1,0 +1,8 @@
+2026-03-22 17:58:48,810 - WARNING - 404 Not Found: POST http://127.0.0.1:8000/api/auth/registe
+2026-03-22 18:07:17,782 - WARNING - 404 Not Found: POST http://127.0.0.1:8000/api/auth/
+2026-03-22 18:07:23,241 - INFO - Registration failed: Email abc@gmail.com already exists.
+2026-03-22 18:09:07,923 - WARNING - Login failed for email: abc@gmail.com
+2026-03-22 18:09:23,962 - ERROR - Internal Server Error: POST http://127.0.0.1:8000/api/auth/login - Error: unsupported type for timedelta minutes component: str
+2026-03-22 18:12:00,933 - ERROR - Internal Server Error: POST http://127.0.0.1:8000/api/auth/login - Error: unsupported type for timedelta minutes component: str
+2026-03-22 18:13:19,178 - ERROR - Internal Server Error: POST http://127.0.0.1:8000/api/auth/login - Error: unsupported type for timedelta minutes component: str
+2026-03-22 18:13:57,406 - INFO - User logged in successfully: abc@gmail.com

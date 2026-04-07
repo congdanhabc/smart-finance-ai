@@ -1,4 +1,4 @@
-from typing import Any, Generic, Type, TypeVar
+from typing import Generic, Type, TypeVar
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from app.core.database import Base
@@ -17,8 +17,8 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
         self.db = db
 
-    def get(self, id: int) -> ModelType | None:
-        return self.db.query(self.model).filter(self.model.id == id).first()
+    def get(self, id: str) -> ModelType | None:
+        return self.db.query(self.model).filter(getattr(self.model, "id") == id).first()
 
     def get_all(self, skip: int = 0, limit: int = 100) -> list[ModelType]:
         return self.db.query(self.model).offset(skip).limit(limit).all()
@@ -42,7 +42,7 @@ class BaseRepository(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.db.refresh(db_obj)
         return db_obj
 
-    def delete(self, id: int) -> ModelType | None:
+    def delete(self, id: str) -> ModelType | None:
         obj = self.get(id)
         if obj:
             self.db.delete(obj)

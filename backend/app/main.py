@@ -7,6 +7,11 @@ from app.core.database import engine
 from app.model import Base
 from app.route.api import api_router
 
+from app.core.config import settings
+
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+
 # Tự động tạo tất cả các bảng trong DB
 Base.metadata.create_all(bind=engine)
 
@@ -19,7 +24,7 @@ app = FastAPI(
 # Cấu hình CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"], 
+    allow_origins=[settings.FRONTEND_URL], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -45,4 +50,14 @@ async def custom_500_handler(request: Request, exc: Exception):
         content={"detail": "An unexpected error occurred. Please try again later or contact support."}
     )
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"422 Validation Error: {request.method} {request.url} - Body: {exc.body} - Details: {exc.errors()}")
+    
+    return JSONResponse(
+        status_code=422,
+        content={"detail": exc.errors(), "message": "Invalid request parameters."}
+    )
+
 app.include_router(api_router, prefix="/api")
+#uvicorn app.main:app --reload

@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { RouterProvider } from 'react-router-dom'
 import { router } from '@/routes'
+import { Toaster } from './components/ui/sonner'
 
 // 1. Khởi tạo cấu hình mặc định cho TanStack Query
 const queryClient = new QueryClient({
@@ -25,6 +26,8 @@ function App() {
       {/* Devtools: Cực kỳ hữu ích để debug API trong quá trình làm đồ án */}
       {/* Nó sẽ hiện một icon bông hoa nhỏ góc phải màn hình, click vào để xem dữ liệu API */}
       <ReactQueryDevtools initialIsOpen={false} position="bottom" />
+
+      <Toaster /> {/* Cung cấp hệ thống thông báo toast cho toàn app */}
       
     </QueryClientProvider>
   )

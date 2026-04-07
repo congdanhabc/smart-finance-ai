@@ -1,12 +1,6 @@
 from app.service.auth import AuthService
-from app.schema.user import UserLogin
-from pydantic import BaseModel, EmailStr
+from app.schema.user import ForgotPasswordRequest, RegisterRequest, ResendOTPRequest, ResetPasswordRequest, UserLogin, VerifyRegistrationRequest
 
-# Schema trung gian nhận request từ Route
-class RegisterRequest(BaseModel):
-    email: EmailStr
-    password: str
-    full_name: str
 
 class AuthController:
     def __init__(self, auth_service: AuthService):
@@ -14,6 +8,18 @@ class AuthController:
 
     def handle_register(self, data: RegisterRequest):
         return self.auth_service.register_user(data.email, data.password, data.full_name)
+    
+    def handle_resend_otp(self, data: ResendOTPRequest):
+        return self.auth_service.resend_activation_otp(data.email)
+    
+    def handle_verify_registration(self, data: VerifyRegistrationRequest):
+        return self.auth_service.verify_registration(data.email, data.code)
 
     def handle_login(self, data: UserLogin):
         return self.auth_service.login_user(data)
+    
+    def handle_forgot_password(self, data: ForgotPasswordRequest):
+        return self.auth_service.forgot_password(data.email)
+    
+    def handle_reset_password(self, data: ResetPasswordRequest):
+        return self.auth_service.reset_password(data.email, data.code, data.new_password)

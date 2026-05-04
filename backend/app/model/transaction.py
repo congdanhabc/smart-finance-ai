@@ -4,10 +4,12 @@ from datetime import datetime, timezone
 import enum
 from app.core.database import Base
 from app.core.utils import generate_short_id
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 
-from backend.app.model.category import Category
-from backend.app.model.wallet import Wallet
+if TYPE_CHECKING:
+    from .wallet import Wallet
+    from .category import Category
+
 
 class TransactionType(str, enum.Enum):
     INCOME = "INCOME"
@@ -28,7 +30,7 @@ class Transaction(Base):
     type: Mapped[TransactionType] = mapped_column(Enum(TransactionType))
     description: Mapped[Optional[str]] = mapped_column(String)
     
-    transaction_date: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    transaction_date: Mapped[datetime] = mapped_column(DateTime, index=True, default=lambda: datetime.now(timezone.utc))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     # Relationships

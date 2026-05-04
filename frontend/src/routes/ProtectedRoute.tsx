@@ -17,7 +17,7 @@ export const PublicRoute = () => {
 
   // Nếu ĐÃ có token -> vào trang chủ Dashboard
   if (token) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/" replace />;
   }
 
   // Nếu CHƯA có token -> Cho phép vào trang Login

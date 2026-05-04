@@ -2,8 +2,10 @@ from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 from app.core.utils import generate_short_id
-from typing import List, Optional
-from backend.app.model.wallet import Wallet
+from typing import List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .wallet import Wallet
 
 class User(Base):
     __tablename__ = "user"
@@ -12,6 +14,7 @@ class User(Base):
     password_hash: Mapped[str] = mapped_column(String, nullable=False)
     full_name: Mapped[Optional[str]] = mapped_column(String)
     is_active: Mapped[bool] = mapped_column(Boolean, default=False)
+    gemini_api_key: Mapped[Optional[str]] = mapped_column(String)
 
     # Relationships
     wallets: Mapped[List["Wallet"]] = relationship(back_populates="owner", cascade="all, delete-orphan")

@@ -9,14 +9,15 @@ class WalletCreate(BaseModel):
     initial_balance: float = 0.0 # Cho phép nhập số dư ban đầu
 
 class WalletUpdate(BaseModel):
-    name: Optional[str] = None
-    type: Optional[WalletType] = None
+    name: Optional[str] = Field(None, min_length=1, description="Tên ví mới")
+    is_active: Optional[bool] = Field(None, description="Trạng thái đóng/mở ví")
 
 class WalletResponse(BaseModel):
     id: str
     name: str
     type: WalletType
     balance: float
+    is_active: bool
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

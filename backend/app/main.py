@@ -1,7 +1,6 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-
 from app.core.logger import logger
 from app.core.database import engine
 from app.model import Base
@@ -10,7 +9,6 @@ from app.route.api import api_router
 from app.core.config import settings
 
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse
 
 # Tự động tạo tất cả các bảng trong DB
 Base.metadata.create_all(bind=engine)
@@ -33,8 +31,16 @@ app.add_middleware(
 
 # 1. Custom lỗi 404 (Endpoint không tồn tại)
 @app.exception_handler(404)
-async def custom_404_handler(request: Request, __):
-    logger.warning(f"404 Not Found: {request.method} {request.url}")
+async def custom_404_handler(request: Request, exc: Exception):
+    # 1. Kiểm tra xem đây có phải là lỗi từ lệnh 'raise HTTPException' không
+    if isinstance(exc, HTTPException):
+        return JSONResponse(
+            status_code=404,
+            content={"detail": exc.detail}
+        )
+    
+    # 2. Nếu không phải (do gõ sai URL), thì mới hiện câu thông báo "API không tồn tại"
+    logger.warning(f"404 Not Found URL: {request.method} {request.url}")
     return JSONResponse(
         status_code=404,
         content={"detail": "The requested API endpoint does not exist on this server."}

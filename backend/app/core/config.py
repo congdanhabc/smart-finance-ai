@@ -12,7 +12,6 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: str = ""
     FRONTEND_URL: str = "http://localhost:5173"
 
-    # Cấu hình theo chuẩn Pydantic v2
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-settings = Settings() # Nếu vẫn đỏ, hãy dùng Cách 1 ở trên
+settings = Settings()

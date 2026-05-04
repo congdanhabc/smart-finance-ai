@@ -72,7 +72,7 @@ export default function AppSidebar({ isDark, onToggleTheme }: AppSidebarProps) {
                     }`}
                   >
                     <Link to={item.path} className="flex items-center gap-3">
-                      <item.icon size={20} className={active ? "text-[#1B212D]" : "text-[#929EAE]"} />
+                      <item.icon size={20} className={active ? "text-[#1B212D] dark:text-white" : "text-[#929EAE]"} />
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -118,7 +118,7 @@ export default function AppSidebar({ isDark, onToggleTheme }: AppSidebarProps) {
                     }`}
                 >
                     <Link to={item.path} className="flex items-center gap-3">
-                    <item.icon size={20} className={active ? "text-[#1B212D]" : "text-[#929EAE]"} />
+                    <item.icon size={20} className={active ? "text-[#1B212D] dark:text-white" : "text-[#929EAE]"} />
                     <span>{item.label}</span>
                     </Link>
                 </SidebarMenuButton>

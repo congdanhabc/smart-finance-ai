@@ -1,6 +1,6 @@
-import { ChevronDown, User } from "lucide-react";
+import { User } from "lucide-react";
 
-export default function AppTopbar({title, userName, isDark}: {title: string, userName: string, isDark: boolean})
+export default function AppTopbar({title, userName }: {title: string, userName: string, isDark: boolean})
 {
     return(
         <header className="flex items-center justify-between px-8 py-7.5 h-27">
@@ -17,7 +17,6 @@ export default function AppTopbar({title, userName, isDark}: {title: string, use
                   {userName}
                 </span>
               </div>
-              <ChevronDown className={`${isDark ? 'text-white' : 'text-[#1B212D]'}`} />
             </div>
           </div>
         </header>

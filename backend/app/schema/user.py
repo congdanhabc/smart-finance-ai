@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, ConfigDict, EmailStr
 
 class RegisterRequest(BaseModel):
@@ -26,8 +28,8 @@ class UserCreate(BaseModel):
     full_name: str
 
 class UserUpdate(BaseModel):
-    full_name: str | None = None
-    password_hash: str | None = None
+    full_name: Optional[str] = None
+    gemini_api_key: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -37,5 +39,11 @@ class UserResponse(BaseModel):
     id: str 
     email: EmailStr
     full_name: str | None = None
+    gemini_api_key: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
+
+class ChangePasswordRequest(BaseModel):
+    old_password: str
+    new_password: str
+    confirm_password: str

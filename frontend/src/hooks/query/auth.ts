@@ -59,5 +59,37 @@ export default function useAuth()
     }
   });
 
-  return { handleLogin, handleRegister, handleVerify, handleResendOtp };
+  const useForgotPassword = () => {
+    return useMutation({
+      mutationFn: (payload: { email: string }) => 
+        api.post<{ detail: string }>(ENDPOINT.AUTH.FORGOT_PASSWORD, payload),
+    });
+  };
+
+  const useResetPassword = () => {
+    return useMutation({
+      mutationFn: (payload: { email: string; code: string; new_password: string }) => 
+        api.post<{ detail: string }>(ENDPOINT.AUTH.RESET_PASSWORD, payload),
+    });
+  };
+
+  return { handleLogin, handleRegister, handleVerify, handleResendOtp, useForgotPassword, useResetPassword };
 }
+
+export const useUpdateProfile = () => {
+  const setAuth = useAuthStore(state => state.setAuth);
+  const token = useAuthStore(state => state.token);
+
+  return useMutation({
+    mutationFn: (payload: any) => api.put(ENDPOINT.AUTH.UPDATE_ME, payload),
+    onSuccess: (data: any) => {
+      if (token) setAuth(token, data);
+    }
+  });
+};
+
+export const useChangePassword = () => {
+  return useMutation({
+    mutationFn: (payload: any) => api.put(ENDPOINT.AUTH.CHANGE_PASSWORD, payload),
+  });
+};

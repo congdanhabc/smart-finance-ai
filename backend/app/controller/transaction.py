@@ -1,5 +1,6 @@
+from app.core.pagination import QueryParams
 from app.service.transaction import TransactionService
-from app.schema.transaction import TransactionCreate, TransferCreate
+from app.schema.transaction import TransactionCreate, TransactionUpdate, TransferCreate
 
 class TransactionController:
     def __init__(self, tx_service: TransactionService):
@@ -14,5 +15,11 @@ class TransactionController:
     def handle_create_transfer(self, user_id: str, data: TransferCreate):
         return self.tx_service.create_transfer(user_id, data)
 
-    def handle_get_all(self, user_id: str):
-        return self.tx_service.get_user_transactions(user_id)
+    def handle_get_all(self, user_id: str, params: QueryParams):
+        return self.tx_service.get_user_transactions(user_id, params)
+    
+    def handle_update_transaction(self, user_id: str, transaction_id: str, data: TransactionUpdate):
+        return self.tx_service.update_transaction(user_id, transaction_id, data)
+
+    def handle_delete_transaction(self, user_id: str, transaction_id: str):
+        return self.tx_service.delete_transaction(user_id, transaction_id)

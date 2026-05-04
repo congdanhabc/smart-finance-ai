@@ -1,5 +1,5 @@
 from app.service.auth import AuthService
-from app.schema.user import ForgotPasswordRequest, RegisterRequest, ResendOTPRequest, ResetPasswordRequest, UserLogin, VerifyRegistrationRequest
+from app.schema.user import ChangePasswordRequest, ForgotPasswordRequest, RegisterRequest, ResendOTPRequest, ResetPasswordRequest, UserLogin, UserUpdate, VerifyRegistrationRequest
 
 
 class AuthController:
@@ -23,3 +23,9 @@ class AuthController:
     
     def handle_reset_password(self, data: ResetPasswordRequest):
         return self.auth_service.reset_password(data.email, data.code, data.new_password)
+    
+    def handle_update_profile(self, user_id, data: UserUpdate):
+        return self.auth_service.update_profile(user_id, data)
+    
+    def handle_change_password(self, user_id, data: ChangePasswordRequest):
+        return self.auth_service.change_password(user_id, data)

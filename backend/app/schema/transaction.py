@@ -22,13 +22,29 @@ class TransactionUpdate(BaseModel):
     description: Optional[str] = None
     transaction_date: Optional[datetime] = None
 
+class CategorySimple(BaseModel):
+    id: str
+    name: str
+    icon: Optional[str] = None
+    color: Optional[str] = None
+    model_config = ConfigDict(from_attributes=True)
+
+class WalletSimple(BaseModel):
+    id: str
+    name: str
+    type: str
+    model_config = ConfigDict(from_attributes=True)
+
 class TransactionResponse(TransactionBase):
     id: str
     wallet_id: str
     to_wallet_id: Optional[str] = None
-    category_id: Optional[str] = None 
-    
+    category_id: Optional[str] = None
     type: TransactionType
     created_at: datetime
+
+    category: Optional[CategorySimple] = None
+    wallet: Optional[WalletSimple] = None
+    wallet_to: Optional[WalletSimple] = None
 
     model_config = ConfigDict(from_attributes=True)

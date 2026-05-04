@@ -1,5 +1,5 @@
 // src/pages/auth/verify.tsx
-import useAuth from '@/hook/query/auth';
+import useAuth from '@/hooks/query/auth';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from 'zod';

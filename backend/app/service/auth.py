@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 from fastapi import HTTPException
 from app.repository.user import UserRepository
-from app.schema.user import UserCreate, UserLogin
+from app.schema.user import ChangePasswordRequest, UserCreate, UserLogin, UserUpdate
 from app.core.security import verify_password, get_password_hash, create_access_token
 from app.core.logger import logger
 from app.core.email import generate_otp, send_email
@@ -20,12 +20,9 @@ class AuthService:
             if bool(user.is_active):
                 raise HTTPException(status_code=400, detail="Địa chỉ email đã được đăng ký.")
             else:
-                setattr(user, "password_hash", hashed_password)
-                setattr(user, "full_name", full_name)
-                self.db.commit()
+                self.user_repo.update(db_obj=user, obj_in={}, password_hash=hashed_password, full_name=full_name)
         else:
-            new_user_data = UserCreate(email=email, password_hash=hashed_password, full_name=full_name)
-            self.user_repo.create(obj_in=new_user_data)
+            self.user_repo.create(obj_in={"email": email, "password_hash": hashed_password, "full_name": full_name})
 
         # Xóa OTP cũ
         self.db.query(OTPCode).filter(OTPCode.email == email, OTPCode.otp_type == "REGISTER").delete()
@@ -84,7 +81,7 @@ class AuthService:
 
         user = self.user_repo.get_by_email(email)
         if user:
-            setattr(user, "is_active", True)
+            self.user_repo.update(db_obj=user, obj_in={}, is_active=True)
         
         self.db.delete(otp_record)
         self.db.commit()
@@ -118,7 +115,7 @@ class AuthService:
 
         user = self.user_repo.get_by_email(email)
         if user:
-            setattr(user, "password_hash", get_password_hash(new_password))
+            self.user_repo.update(db_obj=user, obj_in={}, password_hash=get_password_hash(new_password))
         
         self.db.delete(otp_record)
         self.db.commit()
@@ -147,3 +144,31 @@ class AuthService:
             "full_name": str(user.full_name)
         }
         return {"access_token": access_token, "token_type": "bearer", "user": user_response}
+    
+    def update_profile(self, user_id: str, data: UserUpdate):
+        user = self.user_repo.get(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="Không tìm thấy người dùng.")
+
+        update_data = data.model_dump(exclude_unset=True)
+
+        updated_user = self.user_repo.update(db_obj=user, obj_in=update_data)
+        return updated_user
+
+    def change_password(self, user_id: str, data: ChangePasswordRequest):
+        if data.new_password != data.confirm_password:
+            raise HTTPException(status_code=400, detail="Mật khẩu xác nhận không khớp.")
+            
+        user = self.user_repo.get(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="Không tìm thấy người dùng.")
+
+        # Xác thực mật khẩu cũ
+        if not verify_password(data.old_password, str(user.password_hash)):
+            raise HTTPException(status_code=400, detail="Mật khẩu cũ không chính xác.")
+
+        # Cập nhật mật khẩu mới
+        new_hash = get_password_hash(data.new_password)
+        self.user_repo.update(db_obj=user, obj_in={}, password_hash=new_hash)
+        
+        return {"detail": "Đổi mật khẩu thành công."}

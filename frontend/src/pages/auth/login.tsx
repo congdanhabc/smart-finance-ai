@@ -1,4 +1,4 @@
-import useAuth from '@/hook/query/auth';
+import useAuth from '@/hooks/query/auth';
 import loginSchema from '@/schema/auth/loginSchema';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from "@hookform/resolvers/zod";

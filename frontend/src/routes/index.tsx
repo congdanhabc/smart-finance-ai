@@ -9,11 +9,11 @@ import VerifyPage from '@/pages/auth/verify';
 import WalletPage from '@/pages/wallet/wallet';
 import CategoryPage from '@/pages/category/category';
 import TransactionPage from '@/pages/transaction/transaction';
-import DashboardPage from '@/pages/dashboard';
 import AiChatPage from '@/pages/ai/aiChat';
 import SettingsPage from '@/pages/setting/settings';
 import ForgotPasswordPage from '@/pages/auth/forgotPassword';
 import ResetPasswordPage from '@/pages/auth/resetPassword';
+import DashboardPage from '@/pages/Dashboard';
 
 export const router = createBrowserRouter([
   {

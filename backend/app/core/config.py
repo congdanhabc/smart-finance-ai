@@ -5,7 +5,6 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080
     DATABASE_URL: str = ""
-    GEMINI_API_KEY: str = ""
     SMTP_SERVER: str = ""
     SMTP_PORT: int = 587
     SMTP_USERNAME: str = ""
